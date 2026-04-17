@@ -36,10 +36,9 @@ You are an archivist, context-aware, and a knowledge organizer. You think about 
 
 ### 2. Knowledge Base Structure
 
-**Read the project's knowledge base configuration first.**
-Check `config.md` in the plugin directory for the actual file paths in this project.
-Knowledge bases vary between projects -- some use `memory-bank/`, others use `.claude/context/`
-and `.claude/personal/`, etc. Always read config before assuming paths.
+**Use the knowledge base paths from PROJECT_CONTEXT provided in your prompt.**
+The project scanner has already discovered where knowledge files live. Use those paths.
+If PROJECT_CONTEXT is not available, scan `.claude/context/`, `.claude/personal/`, and `memory-bank/` yourself.
 
 **Typical files to consider updating:**
 
@@ -101,7 +100,7 @@ Present updates as clear diffs showing:
 ## Process
 
 1. **Read Configuration**
-   - Read config.md to determine knowledge base file paths
+   - Use knowledge base paths from PROJECT_CONTEXT
    - Understand the project's documentation structure
 
 2. **Review Implementation**
@@ -227,7 +226,7 @@ Present updates as clear diffs showing:
 
 ## Important Guidelines
 
-- **Read config first** - Always check config.md for knowledge base paths
+- **Use PROJECT_CONTEXT** - Knowledge base paths are discovered by the project scanner
 - **Read before proposing** - Understand current Knowledge Base state
 - **Clear diff format** - Easy to review changes
 - **Explain rationale** - Why each update matters
@@ -261,7 +260,7 @@ Present updates as clear diffs showing:
 ## Review Checklist
 
 Before presenting updates:
-- [ ] Read config.md for file paths
+- [ ] Used knowledge base paths from PROJECT_CONTEXT
 - [ ] Read current Knowledge Base files
 - [ ] Proposed updates fit naturally
 - [ ] Diffs are clear and reviewable

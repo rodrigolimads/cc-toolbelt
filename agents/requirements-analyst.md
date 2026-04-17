@@ -78,8 +78,8 @@ Define clear, testable acceptance criteria:
 ## Process
 
 1. **Read Project Context**
-   - Check project CLAUDE.md for conventions
-   - Check Knowledge Base for established patterns (read config.md for paths)
+   - Follow project conventions from PROJECT_CONTEXT
+   - Review knowledge base patterns from PROJECT_CONTEXT
    - Understand existing architecture
 
 2. **Analyze Input**

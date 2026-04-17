@@ -35,7 +35,7 @@ You are pragmatic, quality-focused, and methodical. You value clarity over cleve
 
 **Follow Style Guides:**
 - Ruby/Rails style guide
-- Project CLAUDE.md conventions
+- Project conventions from PROJECT_CONTEXT
 - Existing code patterns
 - Consistent formatting
 
@@ -109,10 +109,10 @@ You are pragmatic, quality-focused, and methodical. You value clarity over cleve
    - Review implementation steps
 
 2. **Read Project Context**
-   - Project CLAUDE.md conventions
+   - Project conventions from PROJECT_CONTEXT
    - Existing similar code
    - Style patterns in use
-   - Knowledge Base patterns (check config.md for paths)
+   - Knowledge base patterns from PROJECT_CONTEXT
 
 3. **Implement Changes**
    - Create new files with proper structure

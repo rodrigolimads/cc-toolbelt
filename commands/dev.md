@@ -7,13 +7,25 @@ argument-hint: feature-description or ISSUE-KEY
 
 You are orchestrating a comprehensive development workflow that delivers production-ready code through specialized agents. Guide the user through 10 phases with clear decision gates.
 
-## Configuration
+## Project Discovery (runs before everything)
 
-Before starting, read `config.md` in the plugin directory to determine:
-- **Issue tracker type** and which MCP tools to use for fetching issues
-- **Knowledge base paths** for reading/updating project documentation
+Before any phase, run the project scanner to build context:
 
-These settings are project-specific and may differ between projects.
+```
+Use Agent tool with subagent_type="project-scanner"
+
+Prompt:
+"Scan this project and build a context summary. Read all CLAUDE.md files
+(global and project-level), discover knowledge base directories, check for
+config.md, detect the tech stack, and report git state.
+
+Skip session summaries, diaries, and MEMORY.md index files.
+Report only what you find -- don't guess."
+```
+
+Store the scanner's output as `PROJECT_CONTEXT`. Pass it to every subsequent agent as part of their prompt. This ensures all agents share the same understanding of the project's conventions, rules, and existing knowledge.
+
+The project scanner will also find `config.md` if it exists, which provides issue tracker configuration and any custom settings.
 
 ## Command Input
 
@@ -56,7 +68,7 @@ The pattern `[A-Z]+-\d+` indicates an issue tracker reference.
 
 **Steps:**
 1. Detect issue key pattern
-2. Read `config.md` in the plugin directory to determine which tracker and MCP tool to use
+2. Use the issue tracker settings from PROJECT_CONTEXT (discovered by scanner from config.md or project conventions)
 3. Fetch issue details using the configured MCP tool (e.g., `mcp__atlassian__getJiraIssue` for Jira, `mcp__linear-server__get_issue` for Linear)
 4. Extract:
    - Title
@@ -109,10 +121,10 @@ Prompt:
 
 [Issue details OR user description]
 
-Project Context:
-- Read project CLAUDE.md for conventions
-- Check Knowledge Base for established patterns (see config.md for paths)
-- Review existing codebase for similar features
+Project Context (from scanner):
+[INSERT PROJECT_CONTEXT here]
+
+Also review existing codebase for similar features.
 
 Provide:
 1. Functional requirements
@@ -155,11 +167,8 @@ Prompt:
 Requirements:
 [Approved requirements from Phase 1]
 
-Context:
-- Project CLAUDE.md conventions
-- Knowledge Base patterns (check config.md for file paths)
-- Existing codebase patterns
-- Ruby/Rails style guides
+Project Context (from scanner):
+[INSERT PROJECT_CONTEXT here]
 
 Provide:
 1. Recommended architecture
@@ -218,7 +227,7 @@ Guidelines:
 - Handle edge cases properly
 - No comments unless genuinely needed
 - Follow Ruby/Rails style guide
-- Check project CLAUDE.md for conventions
+- Follow project conventions from PROJECT_CONTEXT
 
 Present:
 1. Files created (full content)
@@ -446,14 +455,14 @@ Use pr-review-toolkit agents for comprehensive quality review.
 Use Task tool with subagent_type="pr-review-toolkit:code-reviewer"
 
 Prompt:
-"Review code changes for quality, style, and CLAUDE.md compliance:
+"Review code changes for quality, style, and project convention compliance:
 
 Files changed:
 [git diff output]
 
 Focus on:
 - Code quality issues
-- CLAUDE.md violations
+- Project convention violations (from PROJECT_CONTEXT)
 - Style guide compliance
 - Potential bugs
 - Security issues
@@ -540,8 +549,10 @@ Implementation Summary:
 - Tests: [from Phase 5]
 - Key decisions: [from all phases]
 
-Read config.md in the plugin directory for Knowledge Base file paths.
-Read the current state of those files before proposing changes.
+Project Context (from scanner):
+[INSERT PROJECT_CONTEXT here]
+
+Use the knowledge base paths discovered by the scanner. Read the current state of those files before proposing changes.
 
 Propose updates to the relevant knowledge base files:
 1. Active context - Current focus and recent changes
