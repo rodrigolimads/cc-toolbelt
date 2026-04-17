@@ -1,6 +1,6 @@
 # cc-toolbelt
 
-Custom commands and agents for [Claude Code](https://claude.ai/claude-code). Drop them into your project and go.
+Custom commands and agents for [Claude Code](https://claude.ai/claude-code). Drop them into your project or install globally and go.
 
 ## What's inside
 
@@ -26,41 +26,52 @@ Custom commands and agents for [Claude Code](https://claude.ai/claude-code). Dro
 
 ## Install
 
-### Quick install (symlink into your project)
-
-```bash
-# Clone the repo
-git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
-
-# From your project root, symlink the commands and agents
-mkdir -p .claude/commands .claude/agents
-ln -sf ~/cc-toolbelt/commands/dev.md .claude/commands/dev.md
-ln -sf ~/cc-toolbelt/commands/ci-monitor.md .claude/commands/ci-monitor.md
-for agent in ~/cc-toolbelt/agents/*.md; do
-  ln -sf "$agent" .claude/agents/$(basename "$agent")
-done
-```
-
-### Manual install (copy files)
+### Global (available in all projects)
 
 ```bash
 git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
-
-# Copy what you need
-cp ~/cc-toolbelt/commands/dev.md .claude/commands/
-cp ~/cc-toolbelt/commands/ci-monitor.md .claude/commands/
-cp ~/cc-toolbelt/agents/*.md .claude/agents/
+~/cc-toolbelt/install.sh --global
 ```
 
-### Install script
+This symlinks commands and agents into `~/.claude/`, making `/dev` and `/ci-monitor` available in every project you open with Claude Code.
+
+### Per-project
 
 ```bash
-./install.sh /path/to/your/project
+~/cc-toolbelt/install.sh /path/to/your/project
 ```
+
+This installs into the project's `.claude/` directory. Useful if you want to customize commands for a specific project without affecting others.
+
+### Manual
+
+If you prefer to copy instead of symlink:
+
+```bash
+git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
+
+# Global
+cp ~/cc-toolbelt/commands/*.md ~/.claude/commands/
+cp ~/cc-toolbelt/agents/*.md ~/.claude/agents/
+
+# Or per-project
+cp ~/cc-toolbelt/commands/*.md your-project/.claude/commands/
+cp ~/cc-toolbelt/agents/*.md your-project/.claude/agents/
+```
+
+### Updating
+
+Since the install script uses symlinks, pulling the latest changes is enough:
+
+```bash
+cd ~/cc-toolbelt && git pull
+```
+
+No need to reinstall. The symlinks point to the repo files, so updates take effect immediately.
 
 ## Customize
 
-These are starting points. Edit them to match your stack:
+These are starting points. Fork and edit to match your stack:
 
 - `ci-monitor.md` references GitLab and `glab` CLI. Swap for GitHub Actions and `gh` if that's your setup.
 - `/dev` agents assume Ruby/Rails + RSpec. Adjust the agent files for your framework.

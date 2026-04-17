@@ -1,30 +1,46 @@
 #!/bin/bash
 set -e
 
-TARGET="${1:-.}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-if [ ! -d "$TARGET" ]; then
-  echo "Directory $TARGET does not exist."
-  exit 1
+print_usage() {
+  echo "Usage: ./install.sh [--global | /path/to/project]"
+  echo ""
+  echo "  --global    Install to ~/.claude/ (available in all projects)"
+  echo "  <path>      Install to a specific project's .claude/ directory"
+  echo "  (no args)   Same as --global"
+}
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+  print_usage
+  exit 0
 fi
 
-mkdir -p "$TARGET/.claude/commands" "$TARGET/.claude/agents"
+if [ "$1" = "--global" ] || [ -z "$1" ]; then
+  TARGET="$HOME/.claude"
+  echo "Installing globally to $TARGET"
+else
+  TARGET="$1/.claude"
+  echo "Installing to project: $TARGET"
+fi
 
-echo "Installing commands..."
+mkdir -p "$TARGET/commands" "$TARGET/agents"
+
+echo ""
+echo "Commands:"
 for cmd in "$SCRIPT_DIR"/commands/*.md; do
   name=$(basename "$cmd")
-  ln -sf "$cmd" "$TARGET/.claude/commands/$name"
-  echo "  $name"
+  ln -sf "$cmd" "$TARGET/commands/$name"
+  echo "  /$( echo "$name" | sed 's/.md//' )"
 done
 
-echo "Installing agents..."
+echo ""
+echo "Agents:"
 for agent in "$SCRIPT_DIR"/agents/*.md; do
   name=$(basename "$agent")
-  ln -sf "$agent" "$TARGET/.claude/agents/$name"
+  ln -sf "$agent" "$TARGET/agents/$name"
   echo "  $name"
 done
 
 echo ""
-echo "Done. Commands and agents installed to $TARGET/.claude/"
-echo "Available commands: /dev, /ci-monitor"
+echo "Done. Run /dev or /ci-monitor in Claude Code."
