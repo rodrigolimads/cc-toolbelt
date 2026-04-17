@@ -1,6 +1,6 @@
 # cc-toolbelt
 
-Custom commands and agents for [Claude Code](https://claude.ai/claude-code). Drop them into your project or install globally and go.
+Custom commands, skills, and agents for [Claude Code](https://claude.ai/claude-code). Drop them into your project or install globally and go.
 
 ## What's inside
 
@@ -10,6 +10,12 @@ Custom commands and agents for [Claude Code](https://claude.ai/claude-code). Dro
 |---|---|
 | `/dev` | Autonomous dev workflow. Takes a feature description or ticket ID, runs it through requirements, architecture, implementation, testing, and review phases with specialized agents. |
 | `/ci-monitor` | Monitors a GitLab CI pipeline. Fetches job status via API, reports in a table every 5 minutes, pulls failure details when jobs finish. |
+
+### Skills
+
+| Skill | What it does |
+|---|---|
+| `ci-gamekeeper` | Investigates CI or local test failures and proposes minimal test-layer fixes. Pulls pipeline artifacts, cross-references the project's playbook for known patterns, classifies the failure (regression vs timing vs pollution vs DOM fragility), and stops short of staging or committing. `--auto` mode auto-applies fixes that match a playbook recipe with high confidence. Auto-invocable when CI/test-failure context is detected. |
 
 ### Agents (used by `/dev`)
 
@@ -33,7 +39,7 @@ git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
 ~/cc-toolbelt/install.sh --global
 ```
 
-This symlinks commands and agents into `~/.claude/`, making `/dev` and `/ci-monitor` available in every project you open with Claude Code.
+This symlinks commands, skills, and agents into `~/.claude/`, making `/dev`, `/ci-monitor`, and `ci-gamekeeper` available in every project you open with Claude Code.
 
 ### Per-project
 
@@ -53,10 +59,12 @@ git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
 # Global
 cp ~/cc-toolbelt/commands/*.md ~/.claude/commands/
 cp ~/cc-toolbelt/agents/*.md ~/.claude/agents/
+cp -r ~/cc-toolbelt/skills/* ~/.claude/skills/
 
 # Or per-project
 cp ~/cc-toolbelt/commands/*.md your-project/.claude/commands/
 cp ~/cc-toolbelt/agents/*.md your-project/.claude/agents/
+cp -r ~/cc-toolbelt/skills/* your-project/.claude/skills/
 ```
 
 ### Updating

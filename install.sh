@@ -24,7 +24,7 @@ else
   echo "Installing to project: $TARGET"
 fi
 
-mkdir -p "$TARGET/commands" "$TARGET/agents"
+mkdir -p "$TARGET/commands" "$TARGET/agents" "$TARGET/skills"
 
 echo ""
 echo "Commands:"
@@ -42,5 +42,15 @@ for agent in "$SCRIPT_DIR"/agents/*.md; do
   echo "  $name"
 done
 
+if [ -d "$SCRIPT_DIR/skills" ] && [ -n "$(ls -A "$SCRIPT_DIR/skills" 2>/dev/null)" ]; then
+  echo ""
+  echo "Skills:"
+  for skill_dir in "$SCRIPT_DIR"/skills/*/; do
+    name=$(basename "$skill_dir")
+    ln -sfn "$skill_dir" "$TARGET/skills/$name"
+    echo "  $name"
+  done
+fi
+
 echo ""
-echo "Done. Run /dev or /ci-monitor in Claude Code."
+echo "Done. Run /dev, /ci-monitor, or /ci-gamekeeper in Claude Code."
