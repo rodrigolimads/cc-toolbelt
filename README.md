@@ -16,6 +16,7 @@ Custom commands, skills, and agents for [Claude Code](https://claude.ai/claude-c
 | Skill | What it does |
 |---|---|
 | `ci-gamekeeper` | Investigates CI or local test failures and proposes minimal test-layer fixes. Pulls pipeline artifacts, cross-references the project's playbook for known patterns, classifies the failure (regression vs timing vs pollution vs DOM fragility), and stops short of staging or committing. `--auto` mode auto-applies fixes that match a playbook recipe with high confidence. Auto-invocable when CI/test-failure context is detected. |
+| `desk` | Creates a git worktree for parallel work, each on its own branch. Accepts a Jira ID, a Sentry URL, or a free-text description. For Sentry and text inputs, opens a Jira ticket first (after a dedup search and preview) so the worktree has a ticket attached. Drops a `.desk-context.md` inside the worktree so the new Claude session opens with context already in hand. Reads `.claude/config.md` via `project-scanner` for per-project conventions, so the same skill works in any repo that has one. Companion commands: `/desk list` and `/desk clean`. |
 
 ### Agents (used by `/dev`)
 
@@ -39,7 +40,7 @@ git clone git@github.com:rodrigolimads/cc-toolbelt.git ~/cc-toolbelt
 ~/cc-toolbelt/install.sh --global
 ```
 
-This symlinks commands, skills, and agents into `~/.claude/`, making `/dev`, `/ci-monitor`, and `ci-gamekeeper` available in every project you open with Claude Code.
+This symlinks commands, skills, and agents into `~/.claude/`, making `/dev`, `/ci-monitor`, `ci-gamekeeper`, and `/desk` available in every project you open with Claude Code.
 
 ### Per-project
 
